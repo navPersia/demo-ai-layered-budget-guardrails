@@ -1,0 +1,48 @@
+.ssx-logo {
+  display: block;
+  height: auto;
+  color: currentColor;
+  overflow: visible;
+}
+
+.ssx-logo__word {
+  transform-origin: center;
+  animation: ssx-word-out 1.35s cubic-bezier(.76, 0, .24, 1) 450ms forwards;
+}
+
+.ssx-logo__x {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ssx-x-left 1.35s cubic-bezier(.76, 0, .24, 1) 450ms forwards;
+}
+
+@keyframes ssx-word-out {
+  0%, 48% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-64px);
+    filter: blur(7px);
+  }
+}
+
+@keyframes ssx-x-left {
+  0%, 48% {
+    transform: translateX(0) scale(1);
+  }
+
+  100% {
+    transform: translateX(-390px) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ssx-logo__word,
+  .ssx-logo__x {
+    animation: none;
+  }
+}
