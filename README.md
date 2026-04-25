@@ -88,37 +88,6 @@ The three-layer guardrail system was implemented through:
 - **Workspace-level kill switch** stored in the `killSwitch` container, checked before every AI call
 - **Real-time cost calculation** based on input/output token counts and configurable pricing
 
-### Scaling Decisions
-
-**Why Cosmos DB?**
-- Partition key strategy uses `workspaceId` for natural multi-tenant isolation
-- Free tier option reduces initial deployment costs
-- Built-in TTL enables automatic cleanup of expired sessions
-- Global distribution ready if needed for production expansion
-
-**Why Container Apps?**
-- Consumption-based pricing matches the serverless philosophy
-- Minimal replica configuration (0–1) for cost optimization
-- Zero-cold-start compared to pure Functions for containerized code
-- Better suited for long-running AI calls than traditional Functions
-
-**Why Bicep Templates?**
-- Modular deployment with reusable components (`acr.bicep`, `cosmos.bicep`, etc.)
-- Parameter-driven configuration prevents hardcoding environment-specific values
-- Version-controlled infrastructure enables repeatable deployments
-
-### Cost Optimization Strategy
-
-The implementation prioritizes cost-conscious defaults:
-
-- **Cosmos DB free tier** when available (single account per subscription)
-- **Consumption billing** for Container Apps (pay-per-execution)
-- **Minimal OpenAI deployment capacity** with `GlobalStandard` tier
-- **LRS storage** (locally redundant, not geo-replicated)
-- **Standard Key Vault SKU** (lowest cost tier sufficient for demo)
-
-This design demonstrates how to build production-grade AI features without premium-tier spending.
-
 ## Project Structure
 
 ```
@@ -264,24 +233,11 @@ The Bicep templates demonstrate proper RBAC setup for this pattern.
 
 ## Key Technical Decisions
 
-**Why Python for Azure Functions?**  
-Rich ecosystem for AI work (numpy, scikit-learn, LLM libraries) and strong async support for I/O-bound AI operations.
-
 **Why Cosmos DB over SQL Database?**  
 - Natural fit for hierarchical budget data (workspace → session → events)
 - Flexible schema for future extensions (forecasting, anomaly detection)
 - Built-in TTL for session cleanup
 - Better price-to-performance for this workload
-
-**Why Container Apps over App Service?**  
-- Consumption tier pricing aligns with serverless economics
-- Container-first design simplifies local dev/test
-- Better resource isolation for multiple workloads
-
-**Why Bicep Templates?**  
-- Declarative approach reduces deployment errors
-- Parameter inheritance enables reuse across environments
-- Native Azure support (no DSL learning curve)
 
 ## What This Project Demonstrates
 
@@ -292,19 +248,6 @@ Rich ecosystem for AI work (numpy, scikit-learn, LLM libraries) and strong async
 - **Infrastructure as Code** using Bicep
 - **Real-time monitoring** of AI costs
 - **Budget enforcement** without code changes (kill switch pattern)
-
-## Future Enhancements
-
-Potential areas for extending this reference implementation:
-
-- **Cost forecasting** using historical usage patterns and ML
-- **Anomaly detection** to alert on unusual spending spikes
-- **Advanced analytics dashboard** visualizing budgets and trends
-- **Multi-model support** beyond Azure OpenAI (Claude, Gemini)
-- **Durable Functions** for long-running batch processing
-- **Private endpoints** for VNet-isolated deployments
-- **Custom domains and CDN** for production UI hosting
-- **Rate limiting** per user/workspace for fairness
 
 ## Contributing
 
